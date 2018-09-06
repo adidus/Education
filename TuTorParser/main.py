@@ -30,6 +30,8 @@ def get_references(html, tag):
         name = get_names(row)
         refer = row.find('a', class_ = 'downgif').get('href')
         refer = http + refer
+        torent = tor(title=name, reference=refer)
+        torent.save()
         # data = {'name': name,
         #         'reference': refer,
         #         'tag': tag}
@@ -63,7 +65,7 @@ def get_names(row):
 
 
 client = MongoClient('mongodb://localhost:27017')
-connect('TorentNew')
+connect('To')
 
 
 def main():
@@ -80,7 +82,7 @@ def main():
             'Books': 11}
 
     for tag in tags:
-        for i in range(100):
+        for i in range(1):
             url_gen = ht + str(i) + '/' + str(tags[tag]) + '/0/0/'
             htm = get_html(url_gen)
             get_references(htm, tag)
