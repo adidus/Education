@@ -57,7 +57,7 @@ def get_size(row):
         res[0] = str(res[0])[4:]
     except IndexError:
         res = 'NaN'
-    return(res)
+    return(res[0])
 
 
 # def record_Mongo(data):
