@@ -15,6 +15,7 @@ def get_html(url):
 class tors(Document):
     title = StringField()
     reference = StringField()
+    size = StringField()
     tag = StringField()
 
 def get_references(html, tag):
@@ -27,10 +28,12 @@ def get_references(html, tag):
     # rfrs = []
     # names = []
     for row in table:
+        get_size(row)
         name = get_names(row)
         refer = row.find('a', class_ = 'downgif').get('href')
         refer = http + refer
-        torent = tors(title=name, reference=refer, tag=tag)
+        size = get_size(row)
+        torent = tors(title=name, reference=refer, size=size, tag=tag)
         torent.save()
         # data = {'name': name,
         #         'reference': refer,
@@ -48,12 +51,13 @@ def get_names(row):
     res[0] = str(res[0])[2:]
     return(res[0])
 
-# def get_size(row):
-#     res = []
-#     res = re.findall('ght\">\d*.\d*\.\w\w', str(row))
-#     res[0] = str(res[0])[6:]
-#     print(res[0])
-#     return(res[0])
+def get_size(row):
+    res = re.findall('ht\">\d*\.\d*\s\w*', str(row))
+    try:
+        res[0] = str(res[0])[4:]
+    except IndexError:
+        res = 'NaN'
+    return(res)
 
 
 # def record_Mongo(data):
@@ -82,7 +86,7 @@ def main():
             'Books': 11}
 
     for tag in tags:
-        for i in range(100):
+        for i in range(4):
             url_gen = ht + str(i) + '/' + str(tags[tag]) + '/0/0/'
             htm = get_html(url_gen)
             get_references(htm, tag)
